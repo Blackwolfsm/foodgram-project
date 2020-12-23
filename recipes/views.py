@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
 from .models import Recipe
 from .forms import RecipeForm
@@ -11,10 +12,10 @@ def index(request):
 
 
 def create_recipe(request):
-    """Обрабатывает запрос, если GET, то отдает форму для создания
-       рецепта, если POST, то форма проходит валидацию, при успехе 
-       сохраняется в базе данных"""
+    if request.method == 'POST':
+        form = RecipeForm()
+        return HttpResponse(f'<h1></h1> \n {form}')
     
-    form = RecipeForm()
+    return render(request, 'formRecipe.html')
 
-    return render(request, 'formRecipe.html', {'form': form})
+
