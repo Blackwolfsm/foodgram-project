@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="{% static '/pages/index.css' %}">
     </head>
     <body class="body">
-        <header class="header">{% include 'nav.html' %}</header>
+        {% include 'nav.html' %}
             <main class="main container">
                 <div class="main__header">
                     <h1 class="main__title">Рецепты</h1>
@@ -32,7 +32,8 @@
                 <div class="card-list">
                     {% for recipe in recipes_list %}
                         <div class="card" data-id="{{ recipe.id }}"> 
-                            <a href="#" class="link" target="_blank"><img src="{% static '/images/testCardImg.png' %}" alt="{{ recipe.title }}" class="card__image"></a>
+                            <a href="#" class="link" target="_blank">
+                                <img src={% if recipe.image %}{{ recipe.image.url }}{% else %}"{% static '/images/testCardImg.png' %}"{% endif %} alt="{{ recipe.title }}" class="card__image"></a>
                             <div class="card__body">
                                 <a class="card__title link" href="#" target="_blank">{{ recipe.title }}</a>
                                 <ul class="card__items">
