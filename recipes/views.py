@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from .models import Recipe, Ingredient
 from .forms import RecipeForm
-from .utils import parse_data_for_recipe, parse_name_amount_ingredients
+from .utils import parse_name_amount_ingredients
 
 
 def index(request):
@@ -14,10 +14,9 @@ def index(request):
 
 def create_recipe(request):
     if request.method == 'POST':
-        print(request.POST)
-        data = parse_data_for_recipe(request.POST)
-        form = RecipeForm(data, request.FILES)
+        form = RecipeForm(request.POST, request.FILES)
         list_inrgidients = parse_name_amount_ingredients(request.POST)
+        print(request.POST)
         if form.is_valid():
             new_recipe = form.save(commit=False)
             new_recipe.author = request.user
@@ -27,6 +26,7 @@ def create_recipe(request):
                     Ingredient.objects.get(name=ingr_amount[0]),    
                     through_defaults={'amount': ingr_amount[1]}
                 )
-
             return render(request, 'customPage.html', {'text': 'Ваш рецепт создан'})
-    return render(request, 'formRecipe.html')
+    else:
+        form = RecipeForm()
+    return render(request, 'formRecipe.html', {'form': form})

@@ -8,6 +8,6 @@ from .serializers import IngredientsSerializer
 @api_view(['GET'])
 def ingredient(request):
     filters = request.GET.get('query')
-    ingredients = Ingredient.objects.filter(name__icontains=filters)
+    ingredients = Ingredient.objects.filter(name__icontains=filters.lower())
     serializer = IngredientsSerializer(ingredients, many=True)
     return Response(serializer.data)
