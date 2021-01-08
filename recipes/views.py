@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 
-from .models import Recipe, Ingredient
+from .models import Recipe, Ingredient, User, RecipeIngredient
 from .forms import RecipeForm
 from .utils import parse_name_amount_ingredients
 
@@ -30,3 +30,12 @@ def create_recipe(request):
     else:
         form = RecipeForm()
     return render(request, 'formRecipe.html', {'form': form})
+
+
+def recipe_view(request, username, recipe_id):
+    author_recipe = get_object_or_404(User, username=username)
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    ingredients = RecipeIngredient.objects.filter(recipe=recipe)
+    
+    return render(request, 'viewRecipe.html',
+                  {'author': author_recipe, 'recipe': recipe, 'ingredients': ingredients})
