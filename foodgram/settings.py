@@ -26,7 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'debug_toolbar',
+    'rest_framework',
     'recipes',
     'users',
 ]
@@ -120,6 +122,9 @@ STATICFILES_DIRS = [
     '/recipes/static/'
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_URL = "/auth/login/"
 LOGIN_REDIRECT_URL = "index" 
