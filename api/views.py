@@ -26,6 +26,7 @@ def profile_follow(request):
     return Response('Ghbdtn')
 
 class Subcribe(APIView):
+    
     def post(self, request):
         author_recipe = User.objects.get(id=request.data['id'])
         user = request.user
@@ -34,3 +35,13 @@ class Subcribe(APIView):
             Follow.objects.create(author=author_recipe, user=user)
             return Response({'success': 'True'}, status=status.HTTP_201_CREATED)
         return Response({'succes': 'False'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        author_recipe = User.objects.get(id=request.data['id'])
+        user = request.user
+        subcribe = user.follower.filter(author=author_recipe)
+        if subcribe:
+            user.follower.get(author=author_recipe).delete()
+            return Response({'success': 'True'}, status=status.HTTP_200_OK)
+        return Response({'succes': 'False'}, status=status.HTTP_400_BAD_REQUEST)
+

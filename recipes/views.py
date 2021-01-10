@@ -36,18 +36,15 @@ def recipe_view(request, username, recipe_id):
     author_recipe = get_object_or_404(User, username=username)
     recipe = get_object_or_404(Recipe, id=recipe_id)
     ingredients = RecipeIngredient.objects.filter(recipe=recipe)
-    
+    check_subscribe = False
+
+    if request.user.is_authenticated:
+        if author_recipe.following.filter(user=request.user).exists():
+            check_subscribe = True
+
     return render(request, 'viewRecipe.html',
-                  {'author': author_recipe, 'recipe': recipe, 'ingredients': ingredients})
+                  {'author': author_recipe,
+                  'recipe': recipe,
+                  'ingredients': ingredients,
+                  'subscribe': check_subscribe})
 
-
-def profile_follow(request, username):
-    author = get_object_or_404(User, username=username)
-    user = request.user
-    if user.follower.filter(author=author).exists():
-        return render(request, 'customPage.html', {'text': 'Вы уже подписаны на этого автора.'})
-    if user == author:
-        return render(request, 'customPage.html', {'text': 'Вы не можете подписаться на себя.'})
-
-    Follow.objects.create(user=user, author=author)
-    return render(request, 'customPage.html', {'text': 'Вы успешно подписаны.'})

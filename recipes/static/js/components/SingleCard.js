@@ -24,11 +24,11 @@ class SingleCard extends MainCards{
     }
     _eventSubscribe  (target)  {
         const authorId = target.closest(this.card).getAttribute('data-author');
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         if(target.hasAttribute('data-out')) {
             this.button.subscribe.addSubscribe(target, authorId, csrftoken)
         } else {
-            this.button.subscribe.removeSubscribe(target, authorId)
+            this.button.subscribe.removeSubscribe(target, authorId, csrftoken)
         }
     }
     _eventFavorites  (target)  {
