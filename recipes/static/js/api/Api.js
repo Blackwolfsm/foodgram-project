@@ -47,11 +47,12 @@ class Api {
           return Promise.reject(e.statusText)
       })
   }
-  addSubscriptions(id) {
-    return fetch(`/subscriptions`, {
+  addSubscriptions(id, token) {
+    return fetch(`/api/follow`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': token
       },
       body: JSON.stringify({
         id: id
@@ -64,12 +65,16 @@ class Api {
           return Promise.reject(e.statusText)
       })
   }
-  removeSubscriptions (id) {
-    return fetch(`/subscriptions/${id}`, {
+  removeSubscriptions (id, token) {
+    return fetch(`/api/follow`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        'X-CSRFToken': token
+      },
+      body: JSON.stringify({
+        id: id
+      })
     })
       .then( e => {
           if(e.ok) {

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 
-from .models import Recipe, Ingredient, User, RecipeIngredient
+from .models import Recipe, Ingredient, User, RecipeIngredient, Follow
 from .forms import RecipeForm
 from .utils import parse_name_amount_ingredients
 
@@ -36,6 +36,15 @@ def recipe_view(request, username, recipe_id):
     author_recipe = get_object_or_404(User, username=username)
     recipe = get_object_or_404(Recipe, id=recipe_id)
     ingredients = RecipeIngredient.objects.filter(recipe=recipe)
-    
+    check_subscribe = False
+
+    if request.user.is_authenticated:
+        if author_recipe.following.filter(user=request.user).exists():
+            check_subscribe = True
+
     return render(request, 'viewRecipe.html',
-                  {'author': author_recipe, 'recipe': recipe, 'ingredients': ingredients})
+                  {'author': author_recipe,
+                  'recipe': recipe,
+                  'ingredients': ingredients,
+                  'subscribe': check_subscribe})
+

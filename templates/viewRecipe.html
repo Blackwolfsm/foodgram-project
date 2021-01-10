@@ -12,7 +12,7 @@
 <body class="body">
     {% include 'nav.html' %}
     <main class="main container">
-        <div class="single-card" data-id="371" data-author="12">
+        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
             <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="single-card__image">
             <div class="single-card__info">
                 <div class="single-card__header-info">
@@ -43,8 +43,13 @@
                     </ul>
                 </div>
                 <ul class="single-card__items">
+                    {% csrf_token %}
                     <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
-                    <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
+                    {% if not subscribe %}
+                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
+                    {% else %}
+                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться от автора</button></li>
+                    {% endif %}
                 </ul>
                 <div class="single-card__section">
                     <h3 class="single-card__section-title">Ингридиенты:</h3>
