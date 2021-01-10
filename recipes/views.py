@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 
-from .models import Recipe, Ingredient, User, RecipeIngredient
+from .models import Recipe, Ingredient, User, RecipeIngredient, Follow
 from .forms import RecipeForm
 from .utils import parse_name_amount_ingredients
 
@@ -39,3 +39,15 @@ def recipe_view(request, username, recipe_id):
     
     return render(request, 'viewRecipe.html',
                   {'author': author_recipe, 'recipe': recipe, 'ingredients': ingredients})
+
+
+def profile_follow(request, username):
+    author = get_object_or_404(User, username=username)
+    user = request.user
+    if user.follower.filter(author=author).exists():
+        return render(request, 'customPage.html', {'text': 'Вы уже подписаны на этого автора.'})
+    if user == author:
+        return render(request, 'customPage.html', {'text': 'Вы не можете подписаться на себя.'})
+
+    Follow.objects.create(user=user, author=author)
+    return render(request, 'customPage.html', {'text': 'Вы успешно подписаны.'})

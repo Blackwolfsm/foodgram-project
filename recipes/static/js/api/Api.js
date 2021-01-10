@@ -47,11 +47,12 @@ class Api {
           return Promise.reject(e.statusText)
       })
   }
-  addSubscriptions(id) {
-    return fetch(`/subscriptions`, {
+  addSubscriptions(id, token) {
+    return fetch(`/api/follow`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': token
       },
       body: JSON.stringify({
         id: id
