@@ -33,10 +33,11 @@ class SingleCard extends MainCards{
     }
     _eventFavorites  (target)  {
         const cardId = target.closest(this.card).getAttribute('data-id');
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         if(target.hasAttribute('data-out')) {
-            this.button.favorites.addFavorites(target,cardId, this.tooltipDel)
+            this.button.favorites.addFavorites(target,cardId, this.tooltipDel, csrftoken)
         } else {
-            this.button.favorites.removeFavorites(target,cardId, this.tooltipAdd)
+            this.button.favorites.removeFavorites(target,cardId, this.tooltipAdd, csrftoken)
         }
     }
     tooltipAdd  () {
