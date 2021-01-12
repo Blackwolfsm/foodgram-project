@@ -4,7 +4,7 @@ class Favorites {
         this.api = api;
     }
 
-    addFavorites (target,cardId,csrftoken,callBack) {
+    addFavorites (target,cardId,callBack,csrftoken) {
         target.setAttribute('disabled', true)
         this.api.addFavorites(cardId,csrftoken)
             .then( e => {
@@ -16,7 +16,7 @@ class Favorites {
                 target.removeAttribute('disabled');
             })
     };
-    removeFavorites (target,cardId,csrftoken,callBack) {
+    removeFavorites (target,cardId,callBack,csrftoken) {
         target.setAttribute('disabled', true)
         this.api.removeFavorites(cardId,csrftoken)
             .then( e => {

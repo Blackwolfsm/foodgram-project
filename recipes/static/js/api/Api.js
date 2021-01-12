@@ -84,7 +84,7 @@ class Api {
       })
   }
   addFavorites (id, token)  {
-    return fetch(`/favorites`, {
+    return fetch(`/api/favorites`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -102,12 +102,15 @@ class Api {
         })
   }
   removeFavorites (id, token) {
-    return fetch(`/favorites/${id}`, {
+    return fetch(`/api/favorites`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': token
-      }
+      },
+      body: JSON.stringify({
+        id: id
+      })
     })
         .then( e => {
             if(e.ok) {
