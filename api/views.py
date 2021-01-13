@@ -48,7 +48,7 @@ class Favorites(APIView):
 
     def delete(self, request):
         recipe = Recipe.objects.get(id=request.data['id'])
-        user = request.User
+        user = request.user
         recipe_in_fav = user.recipes_favorites.filter(recipe_id=recipe.id)
         if recipe_in_fav:
             user.recipes_favorites.get(recipe_id=recipe.id).delete()
