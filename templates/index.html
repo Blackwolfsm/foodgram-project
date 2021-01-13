@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="{% static '/pages/index.css' %}">
     </head>
     <body class="body">
+        {% csrf_token %}
         {% include 'nav.html' %}
             <main class="main container">
                 <div class="main__header">
@@ -54,6 +55,11 @@
                             </div>
                             <div class="card__footer">
                                 <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+                                {% if recipe.id in favorites %}
+                                    <button class="button button_style_none" name="favorites"><span class="icon-favorite icon-favorite_active"></span></button>
+                                {% else %}
+                                    <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}
@@ -80,6 +86,11 @@
         <script src="{% static '/js/components/Header.js' %}"></script>
 
         <script src="{% static '/js/api/Api.js' %}"></script>
+        {% if request.user.is_authenticated %}
+        <script src="{% static '/js/components/Favorites.js' %}"></script>
+        <script src="{% static 'indexAuth.js' %}"></script>
+        {% else %}
         <script src="{% static 'indexNotAuth.js' %}"></script>
+        {% endif %}
     </body>
 </html>

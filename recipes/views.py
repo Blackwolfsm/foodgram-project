@@ -1,15 +1,21 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 
-from .models import Recipe, Ingredient, User, RecipeIngredient, Follow
+from .models import Recipe, Ingredient, User, RecipeIngredient, Follow, RecipeFavorites
 from .forms import RecipeForm
 from .utils import parse_name_amount_ingredients
 
 
 def index(request):
     recipes_list = Recipe.objects.all()
+    recipes_favorites_id = []
+    if request.user.is_authenticated:
+        list_favorites = request.user.recipes_favorites.all()
+        for item in list_favorites.values('recipe_id'):
+            recipes_favorites_id.append(item['recipe_id'])
     return render(request, 'index.html', 
-                  {'recipes_list': recipes_list})
+                  {'recipes_list': recipes_list,
+                   'favorites': recipes_favorites_id})
 
 
 def create_recipe(request):
