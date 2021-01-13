@@ -4,9 +4,9 @@ class Favorites {
         this.api = api;
     }
 
-    addFavorites (target,cardId,callBack) {
+    addFavorites (target,cardId,callBack,csrftoken) {
         target.setAttribute('disabled', true)
-        this.api.addFavorites(cardId)
+        this.api.addFavorites(cardId,csrftoken)
             .then( e => {
                 target.innerHTML = this.config.active.text;
                 target.removeAttribute(this.config.attr);
@@ -16,9 +16,9 @@ class Favorites {
                 target.removeAttribute('disabled');
             })
     };
-    removeFavorites (target,cardId,callBack) {
+    removeFavorites (target,cardId,callBack,csrftoken) {
         target.setAttribute('disabled', true)
-        this.api.removeFavorites(cardId)
+        this.api.removeFavorites(cardId,csrftoken)
             .then( e => {
                 target.innerHTML = this.config.default.text;
                 target.setAttribute(this.config.attr, true);

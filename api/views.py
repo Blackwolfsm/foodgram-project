@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from recipes.models import Ingredient, User, Follow
+from recipes.models import Ingredient, User, Follow, Recipe, RecipeFavorites
 from .serializers import IngredientsSerializer
 
 
@@ -35,3 +35,22 @@ class Subcribe(APIView):
             return Response({'success': 'True'}, status=status.HTTP_200_OK)
         return Response({'succes': 'False'}, status=status.HTTP_400_BAD_REQUEST)
 
+class Favorites(APIView):
+
+    def post(self, request):
+        recipe = Recipe.objects.get(id=request.data['id'])
+        user = request.user
+        check_in_fav = user.recipes_favorites.filter(recipe_id=recipe.id).exists()
+        if check_in_fav:
+            return Response({'succes': 'False'}, status=status.HTTP_400_BAD_REQUEST)
+        RecipeFavorites.objects.create(recipe=recipe,user=user)
+        return Response({'success': 'True'}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request):
+        recipe = Recipe.objects.get(id=request.data['id'])
+        user = request.user
+        recipe_in_fav = user.recipes_favorites.filter(recipe_id=recipe.id)
+        if recipe_in_fav:
+            user.recipes_favorites.get(recipe_id=recipe.id).delete()
+            return Response({'success': 'True'}, status=status.HTTP_200_OK)
+        return Response({'succes': 'False'}, status=status.HTTP_400_BAD_REQUEST)
