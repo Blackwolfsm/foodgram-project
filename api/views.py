@@ -75,4 +75,3 @@ class Purchase(APIView):
             user.shop_list.get(recipe_id=recipe.id).delete()
             return Response({'success': 'True'}, status=status.HTTP_200_OK)
         return Response({'succes': 'False'}, status=status.HTTP_400_BAD_REQUEST)
-        
