@@ -5,7 +5,6 @@ class Subscribe {
     }
     addSubscribe (target, authorId) {
         target.setAttribute('disabled', true)
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         this.api.addSubscriptions(authorId, csrftoken)
             .then( e => {
                 target.innerHTML = this.config.active.text;
@@ -22,7 +21,6 @@ class Subscribe {
     };
     removeSubscribe (target, authorId) {
         target.setAttribute('disabled', true)
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         this.api.removeSubscriptions(authorId, csrftoken)
             .then( e => {
                 target.innerHTML = this.config.default.text;
