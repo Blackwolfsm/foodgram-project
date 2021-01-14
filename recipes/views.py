@@ -34,18 +34,11 @@ def create_recipe(request):
 
 def recipe_view(request, username, recipe_id):
     author_recipe = get_object_or_404(User, username=username)
-    user = request.user
     recipe = get_object_or_404(Recipe, id=recipe_id)
     ingredients = RecipeIngredient.objects.filter(recipe=recipe)
-    check_subscribe = False
-
-    if user.is_authenticated:
-        if author_recipe.following.filter(user=user).exists():
-            check_subscribe = True
 
     return render(request, 'viewRecipe.html',
                   {'author': author_recipe,
                   'recipe': recipe,
-                  'ingredients': ingredients,
-                  'subscribe': check_subscribe})
+                  'ingredients': ingredients})
 
