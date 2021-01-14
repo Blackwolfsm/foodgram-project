@@ -8,14 +8,8 @@ from .utils import parse_name_amount_ingredients
 
 def index(request):
     recipes_list = Recipe.objects.all()
-    recipes_favorites_id = []
-    if request.user.is_authenticated:
-        list_favorites = request.user.recipes_favorites.all()
-        for item in list_favorites.values('recipe_id'):
-            recipes_favorites_id.append(item['recipe_id'])
     return render(request, 'index.html', 
-                  {'recipes_list': recipes_list,
-                   'favorites': recipes_favorites_id})
+                  {'recipes_list': recipes_list})
 
 
 def create_recipe(request):
@@ -44,18 +38,14 @@ def recipe_view(request, username, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     ingredients = RecipeIngredient.objects.filter(recipe=recipe)
     check_subscribe = False
-    check_favorites = False
 
     if user.is_authenticated:
         if author_recipe.following.filter(user=user).exists():
             check_subscribe = True
-        if user.recipes_favorites.filter(recipe_id=recipe.id).exists():
-            check_favorites = True
 
     return render(request, 'viewRecipe.html',
                   {'author': author_recipe,
                   'recipe': recipe,
                   'ingredients': ingredients,
-                  'subscribe': check_subscribe,
-                  'favorites': check_favorites})
+                  'subscribe': check_subscribe})
 
