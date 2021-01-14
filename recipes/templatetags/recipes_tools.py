@@ -26,6 +26,13 @@ def is_follower(user, author_id):
 
 @register.filter
 def count_purchases(user):
-    """Фильтр подсчитывает кол-во рецептов в корзине у пользователя"""
+    """Фильтр подсчитывает кол-во рецептов в корзине у пользователя."""
     count = user.shop_list.all().count()
     return count
+
+
+@register.filter
+def recipe_in_basket(user, recipe_id):
+    """Фильтр проверяет, есть ли рецепт с id в корзине покупателя."""
+    check = user.shop_list.filter(recipe_id=recipe_id).exists()
+    return check
