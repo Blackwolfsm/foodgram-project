@@ -1,7 +1,7 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 
-from .models import Recipe, Ingredient, User, RecipeIngredient, Follow, RecipeFavorites
+from .models import Recipe, Ingredient, User, RecipeIngredient, Follow, RecipeFavorites, ShoppingList
 from .forms import RecipeForm
 from .utils import parse_name_amount_ingredients
 
@@ -42,3 +42,24 @@ def recipe_view(request, username, recipe_id):
                   'recipe': recipe,
                   'ingredients': ingredients})
 
+
+def shoplist_view(request):
+    recipe_in_basket = []
+    shoplist = request.user.shop_list.all()
+    if shoplist:
+        recipe_in_basket = Recipe.objects.filter(
+            id__in=shoplist.values('recipe_id'))
+
+    return render(request, 'shopList.html', {'recipes': recipe_in_basket})
+
+
+def page_not_found(request, exception):
+    return render(request, 'customPage.html',
+                  {'text': 'Страница не найдена'}, status=404)
+
+
+def server_error(request):
+    return render(
+        request, 'customPage.html',
+        {'text': 'Ошибка на сервере, попробуйте обновить страницу'},
+        status=500)
