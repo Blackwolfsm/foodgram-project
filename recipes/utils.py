@@ -22,26 +22,6 @@ def parse_name_amount_ingredients(data):
     return ing_value
 
 
-
-
-
-def generate_pdf(queryset):
-    cm = 2.54
-
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=somefilename.pdf'
-
-    elements = []
-
-    doc = SimpleDocTemplate(response, rightMargin=0, leftMargin=6.5 * cm, topMargin=0.3 * cm, bottomMargin=0)
-
-    data=[('Привет',2),(3,4)]
-    table = Table(data, colWidths=270, rowHeights=79)
-    elements.append(table)
-    doc.build(elements) 
-    return response
-
-
 def sum_ingredients(ingredients_with_amount):
     unique = {}
     for ingredient in ingredients_with_amount:
