@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from .models import Recipe, Ingredient, User, RecipeIngredient, Follow, RecipeFavorites, ShoppingList
 from .forms import RecipeForm
-from .utils import parse_name_amount_ingredients
+from .utils import parse_name_amount_ingredients, generate_content_shoplist
 
 
 def index(request):
@@ -51,6 +51,22 @@ def shoplist_view(request):
             id__in=shoplist.values('recipe_id'))
 
     return render(request, 'shopList.html', {'recipes': recipe_in_basket})
+
+
+def get_shoplist(request):
+    user = request.user
+    shop_list = user.shop_list.all()
+    ingredients_in_basket = []
+    if shop_list:
+        ingredients_in_basket = RecipeIngredient.objects.filter(
+            recipe_id__in=shop_list.values('recipe_id'))
+    
+    filename = 'shoplist {0}.txt'.format(user.username)
+    content = generate_content_shoplist(ingredients_in_basket)
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
+    
 
 
 def page_not_found(request, exception):
