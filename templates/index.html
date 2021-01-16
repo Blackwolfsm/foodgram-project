@@ -1,4 +1,4 @@
-{% load recipes_filters %}
+{% load recipes_tools %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -55,7 +55,13 @@
                                 </div>
                             </div>
                             <div class="card__footer">
-                                <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+                                {% if request.user.is_authenticated %}
+                                    {% if request.user|recipe_in_basket:recipe.id %}
+                                        <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span> Рецепт добавлен</button>
+                                    {% else %}
+                                        <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+                                    {% endif %}
+                                {% endif %}
                                 {% if request.user.is_authenticated %}
                                     {% if request.user|is_favorites:recipe.id %}
                                         <button class="button button_style_none" name="favorites"><span class="icon-favorite icon-favorite_active"></span></button>

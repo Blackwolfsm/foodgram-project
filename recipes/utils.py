@@ -1,5 +1,9 @@
 import re
 
+from django.http import HttpResponse
+from reportlab.platypus import SimpleDocTemplate
+from reportlab.platypus.tables import Table
+
 
 def parse_name_amount_ingredients(data):
     """Принимает на вход словарь, находит id ингредиентов,
@@ -16,3 +20,45 @@ def parse_name_amount_ingredients(data):
         value_id = 'valueIngredient_' + str(index)
         ing_value.append([data[name_id], data[value_id]])
     return ing_value
+
+
+
+
+
+def generate_pdf(queryset):
+    cm = 2.54
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=somefilename.pdf'
+
+    elements = []
+
+    doc = SimpleDocTemplate(response, rightMargin=0, leftMargin=6.5 * cm, topMargin=0.3 * cm, bottomMargin=0)
+
+    data=[('Привет',2),(3,4)]
+    table = Table(data, colWidths=270, rowHeights=79)
+    elements.append(table)
+    doc.build(elements) 
+    return response
+
+
+def sum_ingredients(ingredients_with_amount):
+    unique = {}
+    for ingredient in ingredients_with_amount:
+        if ingredient.ingredient.id not in unique:
+            unique[ingredient.ingredient_id] = [
+                ingredient.ingredient.name,
+                ingredient.ingredient.unit,
+                ingredient.amount
+                ]
+        else:
+            unique[ingredient.ingredient_id][2] += ingredient.amount
+    return unique
+
+
+def generate_content_shoplist(queryset):
+    ingredients = sum_ingredients(queryset)
+    text = str()
+    for items in ingredients.values():
+        text += f'[]  {items[0]} - {items[2]} ({(items[1])}). \n'
+    return text

@@ -1,9 +1,9 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 
-from .models import Recipe, Ingredient, User, RecipeIngredient, Follow, RecipeFavorites
+from .models import Recipe, Ingredient, User, RecipeIngredient, Follow, RecipeFavorites, ShoppingList
 from .forms import RecipeForm
-from .utils import parse_name_amount_ingredients
+from .utils import parse_name_amount_ingredients, generate_content_shoplist
 
 
 def index(request):
@@ -34,18 +34,48 @@ def create_recipe(request):
 
 def recipe_view(request, username, recipe_id):
     author_recipe = get_object_or_404(User, username=username)
-    user = request.user
     recipe = get_object_or_404(Recipe, id=recipe_id)
     ingredients = RecipeIngredient.objects.filter(recipe=recipe)
-    check_subscribe = False
-
-    if user.is_authenticated:
-        if author_recipe.following.filter(user=user).exists():
-            check_subscribe = True
 
     return render(request, 'viewRecipe.html',
                   {'author': author_recipe,
                   'recipe': recipe,
-                  'ingredients': ingredients,
-                  'subscribe': check_subscribe})
+                  'ingredients': ingredients})
 
+
+def shoplist_view(request):
+    recipe_in_basket = []
+    shoplist = request.user.shop_list.all()
+    if shoplist:
+        recipe_in_basket = Recipe.objects.filter(
+            id__in=shoplist.values('recipe_id'))
+
+    return render(request, 'shopList.html', {'recipes': recipe_in_basket})
+
+
+def get_shoplist(request):
+    user = request.user
+    shop_list = user.shop_list.all()
+    ingredients_in_basket = []
+    if shop_list:
+        ingredients_in_basket = RecipeIngredient.objects.filter(
+            recipe_id__in=shop_list.values('recipe_id'))
+    
+    filename = 'shoplist {0}.txt'.format(user.username)
+    content = generate_content_shoplist(ingredients_in_basket)
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
+    
+
+
+def page_not_found(request, exception):
+    return render(request, 'customPage.html',
+                  {'text': 'Страница не найдена'}, status=404)
+
+
+def server_error(request):
+    return render(
+        request, 'customPage.html',
+        {'text': 'Ошибка на сервере, попробуйте обновить страницу'},
+        status=500)
