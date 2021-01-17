@@ -32,7 +32,7 @@
                     </ul>
                 </div>
                 <div class="card-list">
-                    {% for recipe in recipes_list %}
+                    {% for recipe in page %}
                         <div class="card" data-id="{{ recipe.id }}"> 
                             <a href="{% url 'recipe_view' recipe.author.username recipe.id %}" class="link">
                                 <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="card__image"></a>
@@ -73,7 +73,10 @@
                         </div>
                     {% endfor %}
                 </div>
-                <nav class="pagination" aria-label="Search results pages">
+                {% if page.has_other_pages %}
+                    {% include 'paginator.html' with items=page paginator=paginator %}
+                {% endif %}
+                <!-- <nav class="pagination" aria-label="Search results pages">
                     <ul class="pagination__container">
                         <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-left"></span></a></li>
                         <li class="pagination__item pagination__item_active"><a class="pagination__link link" href="#">1</a></li>
@@ -84,7 +87,7 @@
                         <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-right"></span></a></li>
                     </ul>
                 </nav>
-            </main>
+            </main> -->
             {% include 'footer.html' %}
         <script src="{% static '/js/components/MainCards.js' %}"></script>
 

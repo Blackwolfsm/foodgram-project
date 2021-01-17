@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 
 from .models import Recipe, Ingredient, User, RecipeIngredient, Follow, RecipeFavorites, ShoppingList
 from .forms import RecipeForm
@@ -8,8 +9,11 @@ from .utils import parse_name_amount_ingredients, generate_content_shoplist
 
 def index(request):
     recipes_list = Recipe.objects.all()
+    paginator = Paginator(recipes_list, 3)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
     return render(request, 'index.html', 
-                  {'recipes_list': recipes_list})
+                  {'page': page, 'paginator': paginator})
 
 
 def create_recipe(request):
