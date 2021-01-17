@@ -61,6 +61,18 @@ def shoplist_view(request):
     return render(request, 'shopList.html', {'recipes': recipe_in_basket})
 
 
+def favorites_view(request):
+    favorites_recipe = Recipe.objects.filter(id__in=request.user.recipes_favorites.values('recipe_id'))
+    tags = get_tags(request)
+    if tags:
+        favorites_recipe = filtering_by_tags(favorites_recipe, tags)
+    paginator = Paginator(favorites_recipe, 3)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'favorites.html', 
+                  {'page': page, 'paginator': paginator, 'tags': tags})
+
+
 def get_shoplist(request):
     user = request.user
     shop_list = user.shop_list.all()
