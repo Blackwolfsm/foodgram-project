@@ -42,3 +42,25 @@ def generate_content_shoplist(queryset):
     for items in ingredients.values():
         text += f'[]  {items[0]} - {items[2]} ({(items[1])}). \n'
     return text
+
+
+def get_tags(request):
+    tags = []
+    if 'tags' in request.GET:
+        tags = request.GET.get('tags')
+        tags = tags.split(',')
+    return tags
+
+
+def filtering_by_tags(queryset, tags):
+    print('до фильтрации')
+    print(queryset)
+    if 'breakfast' in tags:
+        queryset = queryset.filter(breakfast=True)
+    if 'dinner' in tags:
+        queryset = queryset.filter(dinner=True)
+    if 'lunch' in tags:
+        queryset = queryset.filter(lunch=True)
+    print('после фильтрации')
+    print(queryset)
+    return queryset

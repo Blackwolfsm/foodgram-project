@@ -36,3 +36,23 @@ def recipe_in_basket(user, recipe_id):
     """Фильтр проверяет, есть ли рецепт с id в корзине покупателя."""
     check = user.shop_list.filter(recipe_id=recipe_id).exists()
     return check
+
+
+@register.filter
+def formating_tags(request, tag):
+    if 'tags' in request.GET:
+
+        tags = request.GET.get('tags')
+        tags = tags.split(',')
+
+        if tag not in tags:
+            tags.append(tag)
+        else:
+            tags.remove(tag)
+        if '' in tags:
+            tags.remove('')
+
+        result = ','.join(tags)
+        return result
+    
+    return tag

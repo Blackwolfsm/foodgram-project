@@ -4,16 +4,20 @@ from django.core.paginator import Paginator
 
 from .models import Recipe, Ingredient, User, RecipeIngredient, Follow, RecipeFavorites, ShoppingList
 from .forms import RecipeForm
-from .utils import parse_name_amount_ingredients, generate_content_shoplist
+from .utils import parse_name_amount_ingredients, generate_content_shoplist, get_tags, filtering_by_tags
 
 
 def index(request):
     recipes_list = Recipe.objects.all()
+    tags = get_tags(request)
+    print(tags)
+    if tags:
+        recipes_list = filtering_by_tags(recipes_list, tags)
     paginator = Paginator(recipes_list, 3)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'index.html', 
-                  {'page': page, 'paginator': paginator})
+                  {'page': page, 'paginator': paginator, 'tags': tags})
 
 
 def create_recipe(request):

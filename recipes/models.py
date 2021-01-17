@@ -24,8 +24,8 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(Ingredient,
                                          through='RecipeIngredient')
     breakfast = models.BooleanField('Завтрак', default=False)
-    dinner = models.BooleanField('Обед', default=False)
-    lunch = models.BooleanField('Ужин', default=False)
+    lunch = models.BooleanField('Обед', default=False)
+    dinner = models.BooleanField('Ужин', default=False)
     image = models.ImageField('Картинка для рецепта', upload_to='recipes/')
     
     def __str__(self):
