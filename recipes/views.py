@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 from .models import Recipe, Ingredient, User, RecipeIngredient, Follow, RecipeFavorites, ShoppingList
 from .forms import RecipeForm
@@ -19,6 +20,7 @@ def index(request):
                   {'page': page, 'paginator': paginator, 'tags': tags})
 
 
+@login_required
 def create_recipe(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES)
@@ -50,6 +52,7 @@ def recipe_view(request, username, recipe_id):
                   'ingredients': ingredients})
 
 
+@login_required
 def shoplist_view(request):
     recipe_in_basket = []
     shoplist = request.user.shop_list.all()
@@ -60,6 +63,7 @@ def shoplist_view(request):
     return render(request, 'shopList.html', {'recipes': recipe_in_basket})
 
 
+@login_required
 def get_shoplist(request):
     user = request.user
     shop_list = user.shop_list.all()
@@ -75,6 +79,7 @@ def get_shoplist(request):
     return response
 
 
+@login_required
 def favorites_view(request):
     favorites_recipe = Recipe.objects.filter(
         id__in=request.user.recipes_favorites.values('recipe_id')
@@ -89,6 +94,7 @@ def favorites_view(request):
                   {'page': page, 'paginator': paginator, 'tags': tags})
 
 
+@login_required
 def follow_view(request):
     authors = User.objects.filter(
         id__in=request.user.follower.values('author_id')
