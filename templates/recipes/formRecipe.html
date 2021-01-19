@@ -10,20 +10,18 @@
         <link rel="stylesheet" href="{% static '/pages/form.css' %}">
     </head>
     <body class="body">
-        {% include 'nav.html' with new_recipe=True %}
+        {% include 'tool/nav.html' with new_recipe=True %}
         <main class="main container">
             <div class="main__header">
                 <h1 class="main__title">Создание рецепта</h1>
             </div>
-            {% if form.non_field_errors %}
-                {% for error in form.non_field_errors %}
+            {% for error in form.non_field_errors %}
                 <div class='form__error'>
                     <span class="form__error">
                         {{ error }}
                     </span>
                 </div>
-                {% endfor %}
-            {% endif %}
+            {% endfor %}
             <div class="form-container">
                 <form class="form" method="post" enctype="multipart/form-data" action="{% url 'create_recipe' %}">
                     {% csrf_token %}
@@ -59,11 +57,11 @@
                                 </div>
                             </div>
                             {% if form.breakfast.errors%}
-                            {% for error in form.breakfast.errors %}
-                                <span class="form__error">
-                                    {{ error }}
-                                </span>
-                            {% endfor %}
+                                {% for error in form.breakfast.errors %}
+                                    <span class="form__error">
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
                             {% endif %}
                         </div>
                     </div>
@@ -118,15 +116,7 @@
                 </form>
             </div>
         </main>
-        <footer class="footer">
-            <div class="footer__container container">
-                <a href="#" class="footer__brand link">Продуктовый помощник</a>
-                <ul class="footer__items">
-                    <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-                    <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-                </ul>
-            </div>
-        </footer>
+        {% include 'tool/footer.html' %}
         <script src="{% static './js/config/config.js' %}"></script>
         <script src="{% static '/js/components/Header.js' %}"></script>
         <script src="{% static '/js/utils/debouncing.js' %}"></script>

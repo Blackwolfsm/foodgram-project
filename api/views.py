@@ -2,8 +2,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
-from recipes.models import Ingredient, User, Follow, Recipe, RecipeFavorites, ShoppingList
+
+from recipes.models import (Ingredient, User, Follow, Recipe,
+                            RecipeFavorites, ShoppingList)
 from .serializers import IngredientsSerializer
 
 
@@ -16,7 +19,8 @@ def ingredient(request):
 
 
 class Subcribe(APIView):
-    
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         author_recipe = User.objects.get(id=request.data['id'])
         user = request.user
@@ -36,6 +40,7 @@ class Subcribe(APIView):
         return Response({'succes': 'False'}, status=status.HTTP_400_BAD_REQUEST)
 
 class Favorites(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         recipe = Recipe.objects.get(id=request.data['id'])
@@ -57,6 +62,7 @@ class Favorites(APIView):
 
 
 class Purchase(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         recipe = Recipe.objects.get(id=request.data['id'])

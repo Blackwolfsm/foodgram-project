@@ -1,9 +1,9 @@
 {% if request.user.is_authenticated %}
     {% if not favorites %}
-    <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
-    <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
+        <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
+        <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
     {% else %}
-    <button class="button button_style_none" name="favorites"><span class="icon-favorite icon-favorite_big icon-favorite_active"></span></button>
-    <div class="single-card__favorite-tooltip tooltip">Убрать из избранного</div>
+        <button class="button button_style_none" name="favorites"><span class="icon-favorite icon-favorite_big icon-favorite_active"></span></button>
+        <div class="single-card__favorite-tooltip tooltip">Убрать из избранного</div>
     {% endif %}
 {% endif %}

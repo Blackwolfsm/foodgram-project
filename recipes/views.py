@@ -16,7 +16,7 @@ def index(request):
     paginator = Paginator(recipes_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'index.html', 
+    return render(request, 'recipes/index.html', 
                   {'page': page, 'paginator': paginator, 'tags': tags})
 
 
@@ -38,7 +38,7 @@ def create_recipe(request):
             return render(request, 'customPage.html', {'text': 'Ваш рецепт создан'})
     else:
         form = RecipeForm()
-    return render(request, 'formRecipe.html', {'form': form})
+    return render(request, 'recipes/formRecipe.html', {'form': form})
 
 
 def recipe_view(request, username, recipe_id):
@@ -46,7 +46,7 @@ def recipe_view(request, username, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     ingredients = RecipeIngredient.objects.filter(recipe=recipe)
 
-    return render(request, 'viewRecipe.html',
+    return render(request, 'recipes/viewRecipe.html',
                   {'author': author_recipe,
                   'recipe': recipe,
                   'ingredients': ingredients})
@@ -60,7 +60,7 @@ def shoplist_view(request):
         recipe_in_basket = Recipe.objects.filter(
             id__in=shoplist.values('recipe_id'))
 
-    return render(request, 'shopList.html', {'recipes': recipe_in_basket})
+    return render(request, 'recipes/shopList.html', {'recipes': recipe_in_basket})
 
 
 @login_required
@@ -90,7 +90,7 @@ def favorites_view(request):
     paginator = Paginator(favorites_recipe, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'favorites.html', 
+    return render(request, 'recipes/favorites.html', 
                   {'page': page, 'paginator': paginator, 'tags': tags})
 
 
@@ -102,7 +102,7 @@ def follow_view(request):
     paginator = Paginator(authors, 3)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'myFollow.html', {'page': page, 'paginator': paginator})
+    return render(request, 'recipes/myFollow.html', {'page': page, 'paginator': paginator})
 
 
 def profile_view(request, username):
@@ -114,18 +114,18 @@ def profile_view(request, username):
     paginator = Paginator(recipes_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'authorRecipe.html', {'page': page, 'paginator': paginator, 'tags': tags, 'author': author})
+    return render(request, 'recipes/authorRecipe.html', {'page': page, 'paginator': paginator, 'tags': tags, 'author': author})
 
     
 
 
 def page_not_found(request, exception):
-    return render(request, 'customPage.html',
+    return render(request, 'tool/customPage.html',
                   {'text': 'Страница не найдена'}, status=404)
 
 
 def server_error(request):
     return render(
-        request, 'customPage.html',
+        request, 'tool/customPage.html',
         {'text': 'Ошибка на сервере, попробуйте обновить страницу'},
         status=500)
