@@ -8,12 +8,11 @@ from .utils import parse_name_amount_ingredients, generate_content_shoplist, get
 
 
 def index(request):
-    recipes_list = Recipe.objects.all()
+    recipes_list = Recipe.objects.all().order_by('-pub_date')
     tags = get_tags(request)
-    print(tags)
     if tags:
-        recipes_list = filtering_by_tags(recipes_list, tags)
-    paginator = Paginator(recipes_list, 3)
+        recipes_list = filtering_by_tags(recipes_list, tags).order_by('-pub_date')
+    paginator = Paginator(recipes_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'index.html', 
@@ -74,6 +73,43 @@ def get_shoplist(request):
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
+
+
+def favorites_view(request):
+    favorites_recipe = Recipe.objects.filter(
+        id__in=request.user.recipes_favorites.values('recipe_id')
+    )
+    tags = get_tags(request)
+    if tags:
+        favorites_recipe = filtering_by_tags(favorites_recipe, tags)
+    paginator = Paginator(favorites_recipe, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'favorites.html', 
+                  {'page': page, 'paginator': paginator, 'tags': tags})
+
+
+def follow_view(request):
+    authors = User.objects.filter(
+        id__in=request.user.follower.values('author_id')
+    )
+    paginator = Paginator(authors, 3)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'myFollow.html', {'page': page, 'paginator': paginator})
+
+
+def profile_view(request, username):
+    author = get_object_or_404(User, username=username)
+    recipes_list = author.author_recipes.all().order_by('-pub_date')
+    tags = get_tags(request)
+    if tags:
+        recipes_list = filtering_by_tags(recipes_list, tags)
+    paginator = Paginator(recipes_list, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'authorRecipe.html', {'page': page, 'paginator': paginator, 'tags': tags, 'author': author})
+
     
 
 

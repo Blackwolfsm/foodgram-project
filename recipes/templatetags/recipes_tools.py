@@ -56,3 +56,16 @@ def formating_tags(request, tag):
         return result
     
     return tag
+
+
+@register.filter
+def count_text_for_myfollow(queryset):
+    text = 'Еще '
+    count = queryset.count() - 3
+    if count == 1:
+        text += '1 рецепт'
+    elif count < 5:
+        text += f'{count} рецепта'
+    else:
+        text += f'{count} рецептов'
+    return text
