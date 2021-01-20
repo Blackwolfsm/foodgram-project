@@ -1,0 +1,36 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Об авторе</title>
+        <link rel="stylesheet" href="{% static './pages/index.css' %}">
+    </head>
+    <body class="body">
+        {% include 'tool/nav.html' %}
+        <main class="main container">
+            <div class="custom-center-block">
+                    <p class="custom-text-block">
+                        Об авторе
+                        <br>Меня зовут Мокров Сергей и я автор данного сайта. Данный проект был реализован как дипломное задание по окончанию курса от Yandex.Praktikum.
+                        Для связи со мной можно использовать:
+                        <br>Телефон: 9221844242
+                        <br>Whatsapp, Telegramm
+                        <br>Хоть и по своим меркам в мир программирования я пришел достаточно поздно(мне 27 лет), но все равно я испытываю от это огромное удовольствие.
+                        Конечно же, наверное, как и многие, прийдя в програмирование скажут, что мечтали об этом с детства, и я не исключение. Я всегда хотел чтобы моя
+                        работа была связана с разработкой и технологиями.
+                        <br>У меня есть прекрасные две дочки, которые не позволяют погрузится в этот прекрасный мир (програмирования) с головой, но все же, я не отступлюсь от своей
+                        цели - стать классным специалистом веб-разработки, а так же сопутствующих технологий и не очень, все что будет мне интересно(куда же без интереса к GameDev).
+                        <br>И конечно ничего бы не получилось, если бы не поддержка моей дорогой жены, Спасибо любимая за все!
+                    </p>
+                <div class="custom-button-block">
+                    <a href="{% url 'index' %}" class="button button_style_blue">Перейти на главную</a>
+                </div>
+            </div>
+        </main>
+    {% include 'tool/footer.html' %}
+    </body>
+</html>
