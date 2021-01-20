@@ -57,7 +57,6 @@ def edit_recipe(request, username, recipe_id):
     return redirect('recipe_view', recipe.author.username, recipe.id)
 
 
-
 def recipe_view(request, username, recipe_id):
     author_recipe = get_object_or_404(User, username=username)
     recipe = get_object_or_404(Recipe, id=recipe_id)
@@ -135,8 +134,6 @@ def profile_view(request, username):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'recipes/authorRecipe.html', {'page': page, 'paginator': paginator, 'tags': tags, 'author': author})
-
-    
 
 
 def page_not_found(request, exception):

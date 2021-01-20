@@ -1,14 +1,13 @@
 import re
 
 from django.http import HttpResponse
-from reportlab.platypus import SimpleDocTemplate
-from reportlab.platypus.tables import Table
 
 
 def parse_name_amount_ingredients(data):
-    """Принимает на вход словарь, находит id ингредиентов,
-       возвращает список из списков названий игредиентов с 
-       количеством
+    """
+    Принимает на вход словарь, находит id ингредиентов,
+    возвращает список из списков названий игредиентов с 
+    количеством.
     """
     list_id = []
     ing_value = []
@@ -23,6 +22,10 @@ def parse_name_amount_ingredients(data):
 
 
 def sum_ingredients(ingredients_with_amount):
+    """
+    Суммирует у одиннаковых ингредиентов значения, возвращает
+    все уникальные инргедиенты.
+    """
     unique = {}
     for ingredient in ingredients_with_amount:
         if ingredient.ingredient.id not in unique:
@@ -37,6 +40,10 @@ def sum_ingredients(ingredients_with_amount):
 
 
 def generate_content_shoplist(queryset):
+    """
+    Генерирует список состоящий из ингредиентов, который получает
+    из queryset с помощью функции sum_ungredients.
+    """
     ingredients = sum_ingredients(queryset)
     text = str()
     for items in ingredients.values():
@@ -45,6 +52,7 @@ def generate_content_shoplist(queryset):
 
 
 def get_tags(request):
+    """Парсит все теги, которые получает из запроса."""
     tags = []
     if 'tags' in request.GET:
         tags = request.GET.get('tags')
@@ -53,6 +61,10 @@ def get_tags(request):
 
 
 def filtering_by_tags(queryset, tags):
+    """
+    Фильтрует queryset по получаемым тегам из аргумента,
+    при возвращении сортирует по дате публикации.
+    """
     if 'breakfast' in tags:
         queryset = queryset.filter(breakfast=True)
     if 'dinner' in tags:
