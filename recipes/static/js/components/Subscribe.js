@@ -3,9 +3,9 @@ class Subscribe {
         this.config = config;
         this.api = api;
     }
-    addSubscribe (target, authorId, csrftoken) {
+    addSubscribe (target, authorId) {
         target.setAttribute('disabled', true)
-        this.api.addSubscriptions(authorId, csrftoken)
+        this.api.addSubscriptions(authorId)
             .then( e => {
                 target.innerHTML = this.config.active.text;
                 target.classList.remove(this.config.default.class);
@@ -19,9 +19,9 @@ class Subscribe {
                 target.removeAttribute('disabled');
             })
     };
-    removeSubscribe (target, authorId, csrftoken) {
+    removeSubscribe (target, authorId) {
         target.setAttribute('disabled', true)
-        this.api.removeSubscriptions(authorId, csrftoken)
+        this.api.removeSubscriptions(authorId)
             .then( e => {
                 target.innerHTML = this.config.default.text;
                 target.classList.add(this.config.default.class);

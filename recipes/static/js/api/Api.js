@@ -17,10 +17,11 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/purchases`, {
+    return fetch(`/api/purchases`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
       },
       body: JSON.stringify({
         id: id
@@ -34,25 +35,11 @@ class Api {
       })
   }
   removePurchases (id){
-    return fetch(`/purchases/${id}`, {
+    return fetch(`/api/purchases`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then( e => {
-          if(e.ok) {
-              return e.json()
-          }
-          return Promise.reject(e.statusText)
-      })
-  }
-  addSubscriptions(id, token) {
-    return fetch(`/api/follow`, {
-      method: 'POST',
-      headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': token
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
       },
       body: JSON.stringify({
         id: id
@@ -65,12 +52,30 @@ class Api {
           return Promise.reject(e.statusText)
       })
   }
-  removeSubscriptions (id, token) {
+  addSubscriptions(id) {
+    return fetch(`/api/follow`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+      },
+      body: JSON.stringify({
+        id: id
+      })
+    })
+      .then( e => {
+          if(e.ok) {
+              return e.json()
+          }
+          return Promise.reject(e.statusText)
+      })
+  }
+  removeSubscriptions (id) {
     return fetch(`/api/follow`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': token
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
       },
       body: JSON.stringify({
         id: id
@@ -84,10 +89,11 @@ class Api {
       })
   }
   addFavorites (id)  {
-    return fetch(`/favorites`, {
+    return fetch(`/api/favorites`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
       },
       body: JSON.stringify({
         id: id
@@ -101,11 +107,15 @@ class Api {
         })
   }
   removeFavorites (id) {
-    return fetch(`/favorites/${id}`, {
+    return fetch(`/api/favorites`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+      },
+      body: JSON.stringify({
+        id: id
+      })
     })
         .then( e => {
             if(e.ok) {

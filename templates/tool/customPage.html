@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -5,21 +6,19 @@
         <meta name="viewport"
             content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Пароль изменён</title>
-        <link rel="stylesheet" href="./pages/index.css">
+        <title>{{ Text }}</title>
+        <link rel="stylesheet" href="{% static './pages/index.css' %}">
     </head>
     <body class="body">
-        <header class="header">
-            <header class="header">{% include 'tool/nav.html' %}</header>
-        </header>
+        {% include 'tool/nav.html' %}
         <main class="main container">
             <div class="custom-center-block">
-                    <p class="custom-text-block">Пароль изменён успешно</p>
+                    <p class="custom-text-block">{{ text }}</p>
                 <div class="custom-button-block">
-                    <button class="button button_style_blue">Перейти на главную</button>
+                    <a href="{% url 'index' %}" class="button button_style_blue">Перейти на главную</a>
                 </div>
             </div>
         </main>
-        {% include 'tool/footer.html' %}
+    {% include 'tool/footer.html' %}
     </body>
 </html>
