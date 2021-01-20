@@ -47,9 +47,15 @@ def edit_recipe(request, username, recipe_id):
         if request.method == 'POST':
             form = RecipeForm(
                 request.POST, files=request.FILES, instance=recipe)
-            if form.is_valid:
+            list_inrgidients = parse_name_amount_ingredients(request.POST)
+            if form.is_valid():
                 form.save()
-                return redirect('recipe_view', recipe.author, recipe.id)
+                recipe.recipeingredient_set.all().delete()
+                for ingr_amount in list_inrgidients:
+                    recipe.ingredients.add(
+                        Ingredient.objects.get(name=ingr_amount[0]),    
+                        through_defaults={'amount': ingr_amount[1]}
+                )
         else:
             form = RecipeForm(instance=recipe)
         return render(request, 'recipes/formRecipe.html',

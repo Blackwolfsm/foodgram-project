@@ -42,7 +42,6 @@ class RecipeForm(ModelForm):
                     raise ValidationError('Передан не допустимый ингредиент',
                                           code='ingredient')
                 one_or_more = True
-                break
         if not one_or_more:
             raise ValidationError('Добавьте хотя бы один ингредиент',
                                   code='ingredient')
