@@ -12,7 +12,7 @@ def index(request):
     recipes_list = Recipe.objects.all().order_by('-pub_date')
     tags = get_tags(request)
     if tags:
-        recipes_list = filtering_by_tags(recipes_list, tags).order_by('-pub_date')
+        recipes_list = filtering_by_tags(recipes_list, tags)
     paginator = Paginator(recipes_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -25,7 +25,6 @@ def create_recipe(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES)
         list_inrgidients = parse_name_amount_ingredients(request.POST)
-        print(request.POST)
         if form.is_valid():
             new_recipe = form.save(commit=False)
             new_recipe.author = request.user
@@ -39,6 +38,24 @@ def create_recipe(request):
     else:
         form = RecipeForm()
     return render(request, 'recipes/formRecipe.html', {'form': form})
+
+
+@login_required
+def edit_recipe(request, username, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    if request.user == recipe.author:
+        if request.method == 'POST':
+            form = RecipeForm(
+                request.POST, files=request.FILES, instance=recipe)
+            if form.is_valid:
+                form.save()
+                return redirect('recipe_view', recipe.author, recipe.id)
+        else:
+            form = RecipeForm(instance=recipe)
+        return render(request, 'recipes/formRecipe.html',
+                      {'form': form, 'recipe': recipe})
+    return redirect('recipe_view', recipe.author.username, recipe.id)
+
 
 
 def recipe_view(request, username, recipe_id):
@@ -58,7 +75,7 @@ def shoplist_view(request):
     shoplist = request.user.shop_list.all()
     if shoplist:
         recipe_in_basket = Recipe.objects.filter(
-            id__in=shoplist.values('recipe_id'))
+            id__in=shoplist.values('recipe_id')).order_by('-pub_date')
 
     return render(request, 'recipes/shopList.html', {'recipes': recipe_in_basket})
 
@@ -75,14 +92,17 @@ def get_shoplist(request):
     filename = 'shoplist {0}.txt'.format(user.username)
     content = generate_content_shoplist(ingredients_in_basket)
     response = HttpResponse(content, content_type='text/plain')
-    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    response['Content-Disposition'] = (
+        'attachment; filename={0}'.format(filename)
+    )
     return response
 
 
 @login_required
 def favorites_view(request):
     favorites_recipe = Recipe.objects.filter(
-        id__in=request.user.recipes_favorites.values('recipe_id')
+        id__in=request.user.recipes_favorites.values(
+            'recipe_id').order_by('-pub_date')
     )
     tags = get_tags(request)
     if tags:

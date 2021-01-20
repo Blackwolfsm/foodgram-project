@@ -53,14 +53,10 @@ def get_tags(request):
 
 
 def filtering_by_tags(queryset, tags):
-    print('до фильтрации')
-    print(queryset)
     if 'breakfast' in tags:
         queryset = queryset.filter(breakfast=True)
     if 'dinner' in tags:
         queryset = queryset.filter(dinner=True)
     if 'lunch' in tags:
         queryset = queryset.filter(lunch=True)
-    print('после фильтрации')
-    print(queryset)
-    return queryset
+    return queryset.order_by('-pub_date')
