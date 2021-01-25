@@ -19,7 +19,8 @@ def index(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'recipes/index.html', 
-                  {'page': page, 'paginator': paginator, 'tags': tags})
+                  {'page': page, 'paginator': paginator, 'tags': tags,
+                   'index': True})
 
 
 @login_required
