@@ -1,12 +1,12 @@
+from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 
+from recipes.models import (Follow, Ingredient, Recipe, RecipeFavorites,
+                            ShoppingList, User)
 
-from recipes.models import (Ingredient, User, Follow, Recipe,
-                            RecipeFavorites, ShoppingList)
 from .serializers import IngredientsSerializer
 
 

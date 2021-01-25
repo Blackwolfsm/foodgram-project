@@ -1,7 +1,6 @@
-from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-
+from django.db import models
 
 User = get_user_model()
 
@@ -53,6 +52,7 @@ class RecipeFavorites(models.Model):
                              related_name='recipes_favorites')
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
                                related_name='in_fovorites')
+
 
 class ShoppingList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
