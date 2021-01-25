@@ -40,7 +40,8 @@ def create_recipe(request):
             return render(request, 'tool/customPage.html', {'text': 'Ваш рецепт создан'})
     else:
         form = RecipeForm()
-    return render(request, 'recipes/formRecipe.html', {'form': form})
+    return render(request, 'recipes/formRecipe.html',
+                  {'form': form, 'new_recipe': True})
 
 
 @login_required
@@ -62,7 +63,7 @@ def edit_recipe(request, username, recipe_id):
         else:
             form = RecipeForm(instance=recipe)
         return render(request, 'recipes/formRecipe.html',
-                      {'form': form, 'recipe': recipe})
+                      {'form': form, 'recipe': recipe, 'new_recipe': True})
     return redirect('recipe_view', recipe.author.username, recipe.id)
 
 
@@ -110,7 +111,7 @@ def get_shoplist(request):
 def favorites_view(request):
     favorites_recipe = Recipe.objects.filter(
         id__in=request.user.recipes_favorites.values(
-            'recipe_id').order_by('-pub_date')
+            'recipe_id')
     )
     tags = get_tags(request)
     if tags:
@@ -119,7 +120,8 @@ def favorites_view(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'recipes/favorites.html', 
-                  {'page': page, 'paginator': paginator, 'tags': tags})
+                  {'page': page, 'paginator': paginator, 'tags': tags,
+                   'favorites': True})
 
 
 @login_required
@@ -130,7 +132,8 @@ def follow_view(request):
     paginator = Paginator(authors, 3)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'recipes/myFollow.html', {'page': page, 'paginator': paginator})
+    return render(request, 'recipes/myFollow.html',
+                  {'page': page, 'paginator': paginator, 'follow': True})
 
 
 def profile_view(request, username):
