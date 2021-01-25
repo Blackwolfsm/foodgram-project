@@ -86,7 +86,8 @@ def shoplist_view(request):
         recipe_in_basket = Recipe.objects.filter(
             id__in=shoplist.values('recipe_id')).order_by('-pub_date')
 
-    return render(request, 'recipes/shopList.html', {'recipes': recipe_in_basket})
+    return render(request, 'recipes/shopList.html',
+                  {'recipes': recipe_in_basket, 'shoplist': True})
 
 
 @login_required
@@ -97,7 +98,11 @@ def get_shoplist(request):
     if shop_list:
         ingredients_in_basket = RecipeIngredient.objects.filter(
             recipe_id__in=shop_list.values('recipe_id'))
-    
+    else:
+        return render(
+        request, 'tool/customPage.html',
+        {'text': 'Ваш список покупок пуст'})
+        
     filename = 'shoplist {0}.txt'.format(user.username)
     content = generate_content_shoplist(ingredients_in_basket)
     response = HttpResponse(content, content_type='text/plain')
