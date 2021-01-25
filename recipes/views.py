@@ -150,7 +150,10 @@ def profile_view(request, username):
     paginator = Paginator(recipes_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'recipes/authorRecipe.html', {'page': page, 'paginator': paginator, 'tags': tags, 'author': author})
+    return render(request, 'recipes/authorRecipe.html',
+                  {'page': page, 'paginator': paginator,
+                   'tags': tags, 'author': author,
+                   'index': True})
 
 
 def page_not_found(request, exception):
