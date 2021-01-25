@@ -37,7 +37,7 @@ def create_recipe(request):
                     Ingredient.objects.get(name=ingr_amount[0]),    
                     through_defaults={'amount': ingr_amount[1]}
                 )
-            return render(request, 'customPage.html', {'text': 'Ваш рецепт создан'})
+            return render(request, 'tool/customPage.html', {'text': 'Ваш рецепт создан'})
     else:
         form = RecipeForm()
     return render(request, 'recipes/formRecipe.html', {'form': form})
