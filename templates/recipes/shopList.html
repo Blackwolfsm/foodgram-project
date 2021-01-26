@@ -1,42 +1,47 @@
+{% extends 'base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Список покупок</title>
-        <link rel="stylesheet" href="{% static './pages/shopList.css' %}">
-    </head>
-    <body class="body">
-        {% csrf_token %}
-        {% include 'tool/nav.html' with shoplist=True %}
-        <main class="main container">
-            <div class="main__header">
-                <h1 class="main__title">Список покупок</h1>
+
+{% block path_css%}{% static './pages/shopList.css' %}{% endblock %}
+{% block title %}Список покупок{% endblock %}
+
+{% block header %}
+    <h1 class="main__title">Список покупок</h1>
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+    <div class="card-list card-list_column">
+        <ul class="shopping-list">
+            {% if recipes %}
+                {% for recipe in recipes %}
+                    <li class="shopping-list__item" data-id="{{ recipe.id }}">
+                        <div class="recipe recipe_reverse">
+                            <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe__image recipe__image_big">
+                            <h3 class="recipe__title">{{ recipe.title }}</h3>
+                            <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }}</p>
+                        </div>
+                        <button class="shopping-list__button link">Удалить</button>
+                    </li>
+                {% endfor %}
+            {% else %}
+            <div class="custom-center-block">
+                <p class="custom-text-block">Ваш список покупок пуст</p>
+                <div class="custom-button-block">
+                    <a href="{% url 'index' %}" class="button button_style_blue">Перейти на главную</a>
+                </div>
             </div>
-            <div class="card-list card-list_column">
-                <ul class="shopping-list">
-                    {% for recipe in recipes %}
-                        <li class="shopping-list__item" data-id="{{ recipe.id }}">
-                            <div class="recipe recipe_reverse">
-                                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe__image recipe__image_big">
-                                <h3 class="recipe__title">{{ recipe.title }}</h3>
-                                <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }}</p>
-                            </div>
-                            <a href=#> <button class="shopping-list__button link">Удалить</button></a>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <a href="{% url 'get_shoplist' %}"><button class="button button_style_blue">Скачать список</button></a>
-            </div>
-        </main>
-        {% include 'tool/footer.html' %}
-        <script src="{% static './js/config/config.js' %}"></script>
-        <script src="{% static './js/components/Header.js' %}"></script>
-        <script src="{% static './js/components/ShopList.js' %}"></script>
-        <script src="{% static './js/api/Api.js' %}"></script>
-        <script src="{% static 'shopList.js' %}"></script>
-    </body>
-</html>
+            {% endif %}
+        </ul>
+        {% if recipes %}
+            <a href="{% url 'get_shoplist' %}"><button class="button button_style_blue">Скачать список</button></a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static './js/config/config.js' %}"></script>
+    <script src="{% static './js/components/Header.js' %}"></script>
+    <script src="{% static './js/components/ShopList.js' %}"></script>
+    <script src="{% static './js/api/Api.js' %}"></script>
+    <script src="{% static 'shopList.js' %}"></script>
+{% endblock %}

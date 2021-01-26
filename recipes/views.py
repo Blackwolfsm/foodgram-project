@@ -19,7 +19,8 @@ def index(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'recipes/index.html', 
-                  {'page': page, 'paginator': paginator, 'tags': tags})
+                  {'page': page, 'paginator': paginator, 'tags': tags,
+                   'index': True})
 
 
 @login_required
@@ -36,10 +37,11 @@ def create_recipe(request):
                     Ingredient.objects.get(name=ingr_amount[0]),    
                     through_defaults={'amount': ingr_amount[1]}
                 )
-            return render(request, 'customPage.html', {'text': 'Ваш рецепт создан'})
+            return render(request, 'tool/customPage.html', {'text': 'Ваш рецепт создан'})
     else:
         form = RecipeForm()
-    return render(request, 'recipes/formRecipe.html', {'form': form})
+    return render(request, 'recipes/formRecipe.html',
+                  {'form': form, 'new_recipe': True})
 
 
 @login_required
@@ -61,7 +63,7 @@ def edit_recipe(request, username, recipe_id):
         else:
             form = RecipeForm(instance=recipe)
         return render(request, 'recipes/formRecipe.html',
-                      {'form': form, 'recipe': recipe})
+                      {'form': form, 'recipe': recipe, 'new_recipe': True})
     return redirect('recipe_view', recipe.author.username, recipe.id)
 
 
@@ -84,7 +86,8 @@ def shoplist_view(request):
         recipe_in_basket = Recipe.objects.filter(
             id__in=shoplist.values('recipe_id')).order_by('-pub_date')
 
-    return render(request, 'recipes/shopList.html', {'recipes': recipe_in_basket})
+    return render(request, 'recipes/shopList.html',
+                  {'recipes': recipe_in_basket, 'shoplist': True})
 
 
 @login_required
@@ -95,7 +98,11 @@ def get_shoplist(request):
     if shop_list:
         ingredients_in_basket = RecipeIngredient.objects.filter(
             recipe_id__in=shop_list.values('recipe_id'))
-    
+    else:
+        return render(
+        request, 'tool/customPage.html',
+        {'text': 'Ваш список покупок пуст'})
+        
     filename = 'shoplist {0}.txt'.format(user.username)
     content = generate_content_shoplist(ingredients_in_basket)
     response = HttpResponse(content, content_type='text/plain')
@@ -109,7 +116,7 @@ def get_shoplist(request):
 def favorites_view(request):
     favorites_recipe = Recipe.objects.filter(
         id__in=request.user.recipes_favorites.values(
-            'recipe_id').order_by('-pub_date')
+            'recipe_id')
     )
     tags = get_tags(request)
     if tags:
@@ -118,7 +125,8 @@ def favorites_view(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'recipes/favorites.html', 
-                  {'page': page, 'paginator': paginator, 'tags': tags})
+                  {'page': page, 'paginator': paginator, 'tags': tags,
+                   'favorites': True})
 
 
 @login_required
@@ -129,7 +137,8 @@ def follow_view(request):
     paginator = Paginator(authors, 3)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'recipes/myFollow.html', {'page': page, 'paginator': paginator})
+    return render(request, 'recipes/myFollow.html',
+                  {'page': page, 'paginator': paginator, 'follow': True})
 
 
 def profile_view(request, username):
@@ -141,7 +150,10 @@ def profile_view(request, username):
     paginator = Paginator(recipes_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'recipes/authorRecipe.html', {'page': page, 'paginator': paginator, 'tags': tags, 'author': author})
+    return render(request, 'recipes/authorRecipe.html',
+                  {'page': page, 'paginator': paginator,
+                   'tags': tags, 'author': author,
+                   'index': True})
 
 
 def page_not_found(request, exception):

@@ -1,51 +1,41 @@
+{% extends 'base.html' %}
 {% load user_filters %}
 {% load static %}
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Регистрация</title>
-        <link rel="stylesheet" href="{% static '/pages/form.css' %}">
-    </head>
-    <body class="body">
-        {% include 'tool/nav.html' with signup=True %}
-        <main class="main container">
-            <div class="main__header">
-                <h1 class="main__title">Регистрация</h1>
-            </div>
-            {% for error in form.errors %}
-                <div class='form__error'>
-                    <span class="form__error">
-                        {{ error }}
-                    </span>
+
+{% block path_css %}{% static '/pages/form.css' %}{% endblock %}
+{% block title %}Регистрация{% endblock %}
+
+{% block header %}<h1 class="main__title">Регистрация</h1>{% endblock %}
+
+{% block content %}
+    {% for error in form.errors %}
+    <div class='form__error'>
+        <span class="form__error">
+            {{ error }}
+        </span>
+    </div>
+    {% endfor %}
+    <div class="form-container">  
+        <form method="post" class="form" action="{% url 'signup' %}">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form__group">
+                <label for="{{ field.id_for_label }}" class="form__label">{{ field.label }}</label>
+                <div class="form__field-group">
+                    {{ field|addclass:'form__input' }}
+                    {% if field.errors%}
+                        {% for error in field.errors %}
+                            <span class="form__error">
+                                {{ error }}
+                            </span>
+                        {% endfor %}
+                    {% endif %}
                 </div>
-            {% endfor %}
-            <div class="form-container">  
-                <form method="post" class="form" action="{% url 'signup' %}">
-                    {% csrf_token %}
-                    {% for field in form %}
-                    <div class="form__group">
-                        <label for="{{ field.id_for_label }}" class="form__label">{{ field.label }}</label>
-                        <div class="form__field-group">
-                            {{ field|addclass:'form__input' }}
-                            {% if field.errors%}
-                                {% for error in field.errors %}
-                                    <span class="form__error">
-                                        {{ error }}
-                                    </span>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                    <div class="form__footer">
-                        <button class="button button_style_blue">Создать аккаунт</button>
-                    </div>
-                </form>
             </div>
-        </main>
-        {% include 'tool/footer.html' %}
-    </body>
-</html>
+            {% endfor %}
+            <div class="form__footer">
+                <button class="button button_style_blue">Создать аккаунт</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
