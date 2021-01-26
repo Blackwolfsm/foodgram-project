@@ -1,5 +1,26 @@
+{% extends 'base.html' %}
+
 {% load static %}
-<!doctype html>
+
+{% block path_css%}{% static './pages/index.css' %}{% endblock %}
+{% block title %}Об авторе{% endblock %}
+
+{% block content %}
+    <div class="custom-center-block">
+        <p class="custom-text-block">
+            Об авторе
+            <br>Меня зовут Мокров Сергей и я автор данного сайта. Данный проект был реализован как дипломное задание по окончанию курса от Yandex.Praktikum.
+            Для связи со мной можно использовать:
+            <br>Телефон: 9221844242
+            <br>Whatsapp, Telegramm
+        </p>
+        <div class="custom-button-block">
+            <a href="{% url 'index' %}" class="button button_style_blue">Перейти на главную</a>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -33,4 +54,4 @@
         </main>
     {% include 'tool/footer.html' %}
     </body>
-</html>
+</html> -->
