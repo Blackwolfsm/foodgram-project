@@ -53,7 +53,7 @@ def formating_tags(request, tag):
 
         result = ','.join(tags)
         return result
-    
+
     return tag
 
 
