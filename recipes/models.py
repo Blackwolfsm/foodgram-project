@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.db import models
 
 User = get_user_model()
@@ -20,7 +19,7 @@ class Recipe(models.Model):
                                related_name='author_recipes')
     title = models.CharField('Название рецепта', max_length=256)
     descriptions = models.TextField('Описание рецепта', max_length=1024)
-    cooking_time= models.IntegerField('Время приготовления в минутах')
+    cooking_time = models.IntegerField('Время приготовления в минутах')
     ingredients = models.ManyToManyField(Ingredient,
                                          through='RecipeIngredient')
     breakfast = models.BooleanField('Завтрак', default=False)
@@ -29,7 +28,7 @@ class Recipe(models.Model):
     image = models.ImageField('Картинка для рецепта', upload_to='recipes/')
     pub_date = models.DateTimeField(verbose_name='Дата добавления рецепта',
                                     auto_now_add=True)
-    
+
     def __str__(self):
         return self.title
 
@@ -45,6 +44,9 @@ class Follow(models.Model):
                              related_name='follower')
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='following')
+
+    def __str__(self):
+        return f'Подписка пользователя {self.user} на автора {self.author}'
 
 
 class RecipeFavorites(models.Model):

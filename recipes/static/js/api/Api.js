@@ -4,7 +4,7 @@ class Api {
         this.apiUrl =  apiUrl;
     }
   getPurchases () {
-    return fetch(`/purchases`, {
+    return fetch(`/api/purchases/`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -17,7 +17,7 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/api/purchases`, {
+    return fetch(`/api/purchases/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ class Api {
       })
   }
   removePurchases (id){
-    return fetch(`/api/purchases`, {
+    return fetch(`/api/purchases/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ class Api {
       })
   }
   addSubscriptions(id) {
-    return fetch(`/api/follow`, {
+    return fetch(`/api/follow/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ class Api {
       })
   }
   removeSubscriptions (id) {
-    return fetch(`/api/follow`, {
+    return fetch(`/api/follow/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ class Api {
       })
   }
   addFavorites (id)  {
-    return fetch(`/api/favorites`, {
+    return fetch(`/api/favorites/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ class Api {
         })
   }
   removeFavorites (id) {
-    return fetch(`/api/favorites`, {
+    return fetch(`/api/favorites/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

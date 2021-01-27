@@ -4,8 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import RecipeForm
-from .models import (Follow, Ingredient, Recipe, RecipeFavorites,
-                     RecipeIngredient, ShoppingList, User)
+from .models import Ingredient, Recipe, RecipeIngredient, User
 from .utils import (filtering_by_tags, generate_content_shoplist, get_tags,
                     parse_name_amount_ingredients)
 
@@ -18,7 +17,7 @@ def index(request):
     paginator = Paginator(recipes_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'recipes/index.html', 
+    return render(request, 'recipes/index.html',
                   {'page': page, 'paginator': paginator, 'tags': tags,
                    'index': True})
 
@@ -34,10 +33,11 @@ def create_recipe(request):
             new_recipe.save()
             for ingr_amount in list_inrgidients:
                 new_recipe.ingredients.add(
-                    Ingredient.objects.get(name=ingr_amount[0]),    
+                    Ingredient.objects.get(name=ingr_amount[0]),
                     through_defaults={'amount': ingr_amount[1]}
                 )
-            return render(request, 'tool/customPage.html', {'text': 'Ваш рецепт создан'})
+            return render(request, 'tool/customPage.html',
+                          {'text': 'Ваш рецепт создан'})
     else:
         form = RecipeForm()
     return render(request, 'recipes/formRecipe.html',
@@ -57,9 +57,9 @@ def edit_recipe(request, username, recipe_id):
                 recipe.recipeingredient_set.all().delete()
                 for ingr_amount in list_inrgidients:
                     recipe.ingredients.add(
-                        Ingredient.objects.get(name=ingr_amount[0]),    
+                        Ingredient.objects.get(name=ingr_amount[0]),
                         through_defaults={'amount': ingr_amount[1]}
-                )
+                    )
         else:
             form = RecipeForm(instance=recipe)
         return render(request, 'recipes/formRecipe.html',
@@ -74,8 +74,8 @@ def recipe_view(request, username, recipe_id):
 
     return render(request, 'recipes/viewRecipe.html',
                   {'author': author_recipe,
-                  'recipe': recipe,
-                  'ingredients': ingredients})
+                   'recipe': recipe,
+                   'ingredients': ingredients})
 
 
 @login_required
@@ -100,9 +100,9 @@ def get_shoplist(request):
             recipe_id__in=shop_list.values('recipe_id'))
     else:
         return render(
-        request, 'tool/customPage.html',
-        {'text': 'Ваш список покупок пуст'})
-        
+            request, 'tool/customPage.html',
+            {'text': 'Ваш список покупок пуст'})
+
     filename = 'shoplist {0}.txt'.format(user.username)
     content = generate_content_shoplist(ingredients_in_basket)
     response = HttpResponse(content, content_type='text/plain')
@@ -124,7 +124,7 @@ def favorites_view(request):
     paginator = Paginator(favorites_recipe, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'recipes/favorites.html', 
+    return render(request, 'recipes/favorites.html',
                   {'page': page, 'paginator': paginator, 'tags': tags,
                    'favorites': True})
 
@@ -154,15 +154,3 @@ def profile_view(request, username):
                   {'page': page, 'paginator': paginator,
                    'tags': tags, 'author': author,
                    'index': True})
-
-
-def page_not_found(request, exception):
-    return render(request, 'tool/customPage.html',
-                  {'text': 'Страница не найдена'}, status=404)
-
-
-def server_error(request):
-    return render(
-        request, 'tool/customPage.html',
-        {'text': 'Ошибка на сервере, попробуйте обновить страницу'},
-        status=500)

@@ -1,7 +1,5 @@
 import re
 
-from django.http import HttpResponse
-
 
 def parse_name_amount_ingredients(data):
     """

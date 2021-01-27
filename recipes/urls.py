@@ -9,7 +9,9 @@ urlpatterns = [
     path('recipes/favorites/', views.favorites_view, name='favorites'),
     path('recipes/follow/', views.follow_view, name='follow'),
     path('recipes/<username>/', views.profile_view, name='profile'),
-    path('recipes/<username>/<recipe_id>/', views.recipe_view, name='recipe_view'),
-    path('recipes/<username>/<recipe_id>/edit/', views.edit_recipe, name='edit_recipe'),
+    path('recipes/<username>/<recipe_id>/',
+         views.recipe_view, name='recipe_view'),
+    path('recipes/<username>/<recipe_id>/edit/',
+         views.edit_recipe, name='edit_recipe'),
     path('', views.index, name='index'),
 ]
