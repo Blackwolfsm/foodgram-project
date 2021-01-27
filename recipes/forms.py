@@ -8,7 +8,7 @@ class RecipeForm(ModelForm):
     class Meta:
         model = Recipe
         fields = ['title', 'breakfast', 'dinner', 'lunch',
-                  'cooking_time', 'descriptions', 'image']
+                  'cooking_time', 'description', 'image']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,7 +23,7 @@ class RecipeForm(ModelForm):
         self.fields['cooking_time'].widget.attrs.update(
             {'class': 'form__input', 'id': 'id_time', })
         self.fields['cooking_time'].widget.attrs['min'] = 1
-        self.fields['descriptions'].widget.attrs.update(
+        self.fields['description'].widget.attrs.update(
             {'rows': 8, 'class': 'form__textarea', 'id': 'id_description'})
         self.fields['image'].widget.attrs.update({'id': 'id_file'})
 
