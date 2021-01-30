@@ -4,7 +4,7 @@ import re
 def parse_name_amount_ingredients(data):
     """
     Принимает на вход словарь, находит id ингредиентов,
-    возвращает список из списков названий игредиентов с 
+    возвращает список из списков названий игредиентов с
     количеством.
     """
     list_id = []
@@ -69,4 +69,4 @@ def filtering_by_tags(queryset, tags):
         queryset = queryset.filter(dinner=True)
     if 'lunch' in tags:
         queryset = queryset.filter(lunch=True)
-    return queryset.order_by('-pub_date')
+    return queryset

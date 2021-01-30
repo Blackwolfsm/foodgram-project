@@ -7,6 +7,7 @@
 {% block title %}{{ recipe.title }}{% endblock %}
 
 {% block content %}
+    {% csrf_token %}
     <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
         <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="single-card__image">
         <div class="single-card__info">
@@ -48,11 +49,21 @@
             </div>
             <ul class="single-card__items">
                 {% if request.user.is_authenticated %}
-                    <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
-                    {% if request.user|is_follower:recipe.author.id %}
-                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться от автора</button></li>
-                    {% else %}  
-                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
+                    <li class="single-card__item">
+                        {% if request.user|recipe_in_basket:recipe.id %}
+                            <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span> Рецепт добавлен</button>
+                        {% else %}
+                            <button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button>
+                        {% endif %}
+                    </li>
+                    {% if request.user != recipe.author %}
+                        <li class="single-card__item"></li>
+                            {% if request.user|is_follower:recipe.author.id %}
+                                <button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться от автора</button>
+                            {% else %}  
+                                <button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button>
+                            {% endif %}
+                        </li>
                     {% endif %}
                 {% endif %}
             </ul>
