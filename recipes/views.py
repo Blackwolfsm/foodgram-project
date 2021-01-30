@@ -75,28 +75,24 @@ def recipe_view(request, username, recipe_id):
 
 @login_required
 def shoplist_view(request):
-    """
-    Переменная shoplist заполняется записями из таблицы не только
-    для проверки, но и для фильтрации рецептов.
-    """
-    recipe_in_basket = []
     shoplist = request.user.shop_list.all()
-    if shoplist:
-        recipe_in_basket = Recipe.objects.filter(
-            id__in=shoplist.values('recipe_id'))
 
     return render(request, 'recipes/shopList.html',
-                  {'recipes': recipe_in_basket, 'shoplist': True})
+                  {'shopinglist': shoplist, 'shoplist': True})
 
 
 @login_required
 def get_shoplist(request):
+    """
+    Переменная shoplist нужна так же для фильтрации записей
+    всех ингредиентов со значениями количества для рецептов
+    """
     user = request.user
-    shop_list = user.shop_list.all()
+    shoplist = user.shop_list.all()
     ingredients_in_basket = []
-    if shop_list:
+    if shoplist:
         ingredients_in_basket = RecipeIngredient.objects.filter(
-            recipe_id__in=shop_list.values('recipe_id'))
+            recipe_id__in=shoplist.values('recipe_id'))
     else:
         return render(
             request, 'tool/customPage.html',
