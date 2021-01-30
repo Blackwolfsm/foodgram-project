@@ -9,8 +9,9 @@ class Command(BaseCommand):
     help = 'Наполнение базы данных ингредиентами'
 
     def handle(self, *args, **options):
-        
-        with open('recipes/fixtures/ingredients.csv', encoding='utf-8') as csvfile:
+
+        with open('recipes/fixtures/ingredients.csv',
+                  encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 name, unit = row
