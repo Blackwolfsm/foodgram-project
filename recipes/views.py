@@ -83,14 +83,11 @@ def shoplist_view(request):
 
 @login_required
 def get_shoplist(request):
-    """
-    Переменная shoplist нужна так же для фильтрации записей
-    всех ингредиентов со значениями количества для рецептов
-    """
     user = request.user
-    shoplist = user.shop_list.all()
+    check_shoplist = user.shop_list.all().exists()
     ingredients_in_basket = []
-    if shoplist:
+    if check_shoplist:
+        shoplist = user.shop_list.all()
         ingredients_in_basket = RecipeIngredient.objects.filter(
             recipe_id__in=shoplist.values('recipe_id'))
     else:
