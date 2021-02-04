@@ -28,4 +28,4 @@ services:
       - folder_static:/code/static
       - folder_media:/code/media
     ports:
-      - "8002:8002"
+      - "80:80"
