@@ -8,7 +8,7 @@ SECRET_KEY = '0f(ug=ol_g7bu16-gai4zfbvwe(y&7f=jogt(5!1)szawu^a!t'
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,7 +18,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'debug_toolbar',
     'rest_framework',
     'recipes',
     'users',
