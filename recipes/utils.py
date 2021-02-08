@@ -45,7 +45,7 @@ def generate_content_shoplist(queryset):
     ingredients = sum_ingredients(queryset)
     text = str()
     for items in ingredients.values():
-        text += f'[]  {items[0]} - {items[2]} ({(items[1])}). \n'
+        text += f'[ ]  {items[0]} - {items[2]} ({(items[1])}). \r\n'
     return text
 
 

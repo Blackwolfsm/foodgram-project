@@ -94,13 +94,9 @@ def get_shoplist(request):
         return render(
             request, 'tool/customPage.html',
             {'text': 'Ваш список покупок пуст'})
-
-    filename = 'shoplist {0}.txt'.format(user.username)
     content = generate_content_shoplist(ingredients_in_basket)
-    response = HttpResponse(content, content_type='text/plain')
-    response['Content-Disposition'] = (
-        'attachment; filename={0}'.format(filename)
-    )
+    response = HttpResponse(content, content_type='application/txt')
+    response['Content-Disposition'] = 'attachment; filename=shoplist.txt'
     return response
 
 
