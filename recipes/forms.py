@@ -47,6 +47,11 @@ class RecipeForm(ModelForm):
                     raise ValidationError('Передан не допустимый ингредиент',
                                           code='ingredient')
                 one_or_more = True
+            if key.startswith('valueIngredient_'):
+                if int(self.data[key]) < 1:
+                    raise ValidationError('Значения ингредиентов должны быть \
+                        положительным числом', code='ingredient')
+
         if not one_or_more:
             raise ValidationError('Добавьте хотя бы один ингредиент',
                                   code='ingredient')
