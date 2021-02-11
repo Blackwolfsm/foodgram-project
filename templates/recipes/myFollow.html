@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
     <div class="card-list">
         {% for author in page %}
             <div class="card-user" data-author="{{ author.id }}">
